@@ -93,7 +93,7 @@
 <script>
     // вывод текущего пользователя
     $(document).ready(async function () {
-        const response = await fetch('/api/current');
+        const response = await fetch('/api/user/current');
         const user = await response.json();
 
 

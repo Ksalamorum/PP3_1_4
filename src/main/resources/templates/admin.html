@@ -349,7 +349,7 @@
 
             // вывод текущего пользователя
             $(document).ready(async function () {
-                const response = await fetch('/api/current');
+                const response = await fetch('/api/admin/current');
                 const user = await response.json();
 
 
@@ -359,7 +359,7 @@
 
             //обновление текущего пользователя на случай его изменения
             async function updateCurrentUser() {
-                const response = await fetch('/api/current');
+                const response = await fetch('/api/admin/current');
                 const user = await response.json();
 
                 $('#currentUser').text(user.username);

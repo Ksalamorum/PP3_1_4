@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -16,7 +18,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class AdminRestController {
 
     private final UserService userService;
@@ -29,13 +31,13 @@ public class AdminRestController {
     }
 
 
-    @GetMapping("/admin")
+    @GetMapping()
     public ResponseEntity<List<User>> getAll() {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/admin/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
         User user = userService.findById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -68,14 +70,8 @@ public class AdminRestController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<User> getCurrent(Principal principal) {
-        User user = (User) userService.loadUserByUsername(principal.getName());
+    public ResponseEntity<User> getCurrent(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = (User) userService.loadUserByUsername(userDetails.getUsername());
         return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/admin",
-    produces = MediaType.TEXT_HTML_VALUE)
-    public String adminPage(){
-        return "admin";
     }
 }
